@@ -1,0 +1,59 @@
+# Modified from https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Publish Node Package
+author: Colin Parsons
+description: Publish a NodeJS package to NPM and GitHub Packages.
+branding:
+  icon: box
+  color: blue
+
+inputs:
+  npm-token:
+    description: NPM token
+    required: true
+  github-token:
+    description:
+      "GitHub token, which will just be the default {{ secrets.GITHUB_TOKEN }}
+      for this workflow. Before writing the steps for this job, remember to
+      include\n\npermissions:\n\tcontents: read\n\tpackages:write\n\nfor this
+      job."
+    required: true
+  scope:
+    description:
+      'Scope for GitHub Packages. This is usually just the user or organization
+      that owns the workflow file, prefixed with @. Example: @octocat for the
+      octocat/my-node-package repository.'
+    required: true
+
+runs:
+  using: composite
+
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Setup .npmrc file to publish to NPM
+      shell: bash
+      run:
+        'echo "//registry.npmjs.org/:_authToken=${{ inputs.npm-token
+        }}\nregistry=https://registry.npmjs.org/\nalways-auth=true" > .npmrc'
+
+    - name: Publish to NPM
+      shell: bash
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+
+    - name: Setup .npmrc file to publish to GitHub Packages
+      shell: bash
+      run:
+        'echo "//npm.pkg.github.com/:_authToken=${{ inputs.github-token }}\n${{
+        inputs.scope }}:registry=https://npm.pkg.github.com\nalways-auth=true" >
+        .npmrc'
+
+    - name: Publish to GitHub Packages
+      shell: bash
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.github-token }}
