@@ -39,3 +39,20 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           scope: @my-username-or-organization
 ```
+
+## License
+
+See the [License](LICENSE).
+
+## Contributing
+
+See the [Contributing Guidelines](CONTRIBUTING.md).
+
+### Contributor Code of Conduct
+
+See the [Code of Conduct](CODE-OF-CONDUCT.md)
+
+## Contact
+
+If you're interested in getting in touch outside of this project, check out
+[colinparsons.com](https://colinparsons.com).
