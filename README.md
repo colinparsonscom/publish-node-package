@@ -50,7 +50,7 @@ See the [Contributing Guidelines](CONTRIBUTING.md).
 
 ### Contributor Code of Conduct
 
-See the [Code of Conduct](CODE-OF-CONDUCT.md)
+See the [Code of Conduct](CODE-OF-CONDUCT.md).
 
 ## Contact
 
