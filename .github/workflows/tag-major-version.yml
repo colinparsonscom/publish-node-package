@@ -26,6 +26,12 @@ jobs:
           MAJOR=${${{ github.event.release.title }}%%.*}
           echo "major=$MAJOR\n" >> $GITHUB_OUTPUT
 
+      # https://stackoverflow.com/questions/20076233/replace-remote-tag-with-git
+      - name: Delete old tag if it exists
+        run: |
+          git tag -d ${{ steps.version.outputs.major }}
+          git push origin :refs/tags/${{ steps.version.outputs.major }}
+
       - name: Create new tag for major version
         run: |
           git tag -a ${{ steps.version.outputs.major }} -m "Major version ${{ steps.version.outputs.major }}"
