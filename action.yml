@@ -20,8 +20,8 @@ inputs:
     required: false
   scope:
     description:
-      'Scope for GitHub Packages. This is usually the user or organization that
-      owns the workflow file, prefixed with @. Example: @octocat for the
+      'Scope for GitHub Packages. This is usually just the user or organization
+      that owns the workflow file, prefixed with @. Example: @octocat for the
       octocat/my-node-package repository.'
     required: false
 
