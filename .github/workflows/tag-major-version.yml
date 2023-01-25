@@ -23,7 +23,7 @@ jobs:
         # We just remove everything after the first period
         # https://stackoverflow.com/questions/4168371/how-can-i-remove-all-text-after-a-character-in-bash
         run: |
-          MAJOR=${${{ github.event.release.title }}%%.*}
+          MAJOR=${${{ github.event.release.tag_name }}%%.*}
           echo "major=$MAJOR\n" >> $GITHUB_OUTPUT
 
       # https://stackoverflow.com/questions/20076233/replace-remote-tag-with-git
