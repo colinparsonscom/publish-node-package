@@ -30,7 +30,7 @@ jobs:
         # https://stackoverflow.com/questions/4168371/how-can-i-remove-all-text-after-a-character-in-bash
         run: |
           MAJOR=$(echo ${{ github.event.release.name }} | cut -f1 -d".")
-          echo "major=$MAJOR\n" >> $GITHUB_OUTPUT
+          echo "major=$MAJOR" >> $GITHUB_OUTPUT
 
       # https://stackoverflow.com/questions/20076233/replace-remote-tag-with-git
       - name: Delete old tag if it exists
