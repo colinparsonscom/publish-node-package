@@ -1,0 +1,32 @@
+name: Tag major version
+# After creating a release with a semantic version, update the major version tag
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  tag:
+    runs-on: ubuntu-22.04
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get major version of release
+        id: version
+        # Release name will be something like v1.2.3, and we want to get v1
+        # We just remove everything after the first period
+        # https://stackoverflow.com/questions/4168371/how-can-i-remove-all-text-after-a-character-in-bash
+        run: |
+          MAJOR=${${{ github.event.release.title }}%%.*}
+          echo "major=$MAJOR\n" >> $GITHUB_OUTPUT
+
+      - name: Create new tag for major version
+        run: |
+          git tag -a ${{ steps.version.outputs.major }} -m "Major version ${{ steps.version.outputs.major }}"
+          git push -u origin ${{ steps.version.outputs.major }}
