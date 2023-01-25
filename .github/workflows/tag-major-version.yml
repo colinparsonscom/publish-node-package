@@ -42,8 +42,8 @@ jobs:
         uses: octokit/request-action@v2.x
         with:
           route:
-            'DELETE /repos/${{ github.repository_owner }}/${{ github.repository
-            }}/git/refs/${{ steps.version.outputs.major }}'
+            DELETE /repos/${{ github.repository }}/git/refs/${{
+            steps.version.outputs.major }}
           owner: ${{ github.repository_owner }}
           repo: ${{ github.repository }}
           conclusion: 'success'
