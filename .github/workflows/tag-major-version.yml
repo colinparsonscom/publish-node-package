@@ -34,7 +34,7 @@ jobs:
 
       - name: Delete old tag locally
         # If tag doesn't exist locally, we still want to exit without failing
-        run: git tag -d ${{ steps.version.outputs.major }} | true
+        run: git tag -d ${{ steps.version.outputs.major }} || true
 
       - name: Delete old tag remotely
         # https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#delete-a-reference
