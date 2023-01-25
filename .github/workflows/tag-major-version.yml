@@ -32,13 +32,29 @@ jobs:
           MAJOR=$(echo ${{ github.event.release.name }} | cut -f1 -d".")
           echo "major=$MAJOR" >> $GITHUB_OUTPUT
 
-      # https://stackoverflow.com/questions/20076233/replace-remote-tag-with-git
-      - name: Delete old tag if it exists
-        run: |
-          git tag -d ${{ steps.version.outputs.major }}
-          git push origin :refs/tags/${{ steps.version.outputs.major }}
+      - name: Delete old tag locally
+        # If tag doesn't exist locally, we still want to exit without failing
+        run: git tag -d ${{ steps.version.outputs.major }} | true
+
+      - name: Delete old tag remotely
+        # https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#delete-a-reference
+        # If tag doesn't exist remotely, we still want to exit without failing
+        uses: octokit/request-action@v2.x
+        with:
+          route:
+            'DELETE /repos/${{ github.repository_owner }}/${{ github.repository
+            }}/git/refs/${{ steps.version.outputs.major }}'
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.repository }}
+          conclusion: 'success'
+          status: 'completed'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create new tag for major version
-        run: |
-          git tag -a ${{ steps.version.outputs.major }} -m "Major version ${{ steps.version.outputs.major }}"
-          git push -u origin ${{ steps.version.outputs.major }}
+        run:
+          git tag -a ${{ steps.version.outputs.major }} -m "Major version ${{
+          steps.version.outputs.major }}"
+
+      - name: Push new tag remotely
+        run: git push -u origin ${{ steps.version.outputs.major }}
