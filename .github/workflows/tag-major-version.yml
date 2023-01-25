@@ -17,13 +17,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Throw error if the tag name doesn't equal the release name
+        if: ${{ github.event.release.tag_name != github.event.release.name }}
+        run: |
+          echo "Tag name and release name must be the same"
+          exit 1
+
       - name: Get major version of release
         id: version
         # Release name will be something like v1.2.3, and we want to get v1
         # We just remove everything after the first period
         # https://stackoverflow.com/questions/4168371/how-can-i-remove-all-text-after-a-character-in-bash
         run: |
-          MAJOR=${${{ github.event.release.tag_name }}%%.*}
+          MAJOR=(echo ${{ github.event.release.name }} | cut -f1 -d".")
           echo "major=$MAJOR\n" >> $GITHUB_OUTPUT
 
       # https://stackoverflow.com/questions/20076233/replace-remote-tag-with-git
