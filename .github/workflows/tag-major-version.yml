@@ -22,8 +22,15 @@ jobs:
       - name: Throw error if the tag name doesn't equal the release name
         if: ${{ github.event.release.tag_name != github.event.release.name }}
         run: |
-          echo "Tag name and release name must be the same"
+          echo "Tag name (${{ github.event.release.tag_name }}) and release name (${{ github.event.release.name }}) must be the same"
           exit 1
+
+      - name: Throw error if release name isn't semver in the format v1.2.3
+        run: |
+          if [[ ! ${{ github.event.release.name }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Release name (${{ github.event.release.name }}) must be semver, in the format v1.2.3"
+            exit 1
+          fi
 
       - name: Checkout
         uses: actions/checkout@v3
