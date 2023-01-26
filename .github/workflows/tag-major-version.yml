@@ -19,13 +19,14 @@ jobs:
         shell: bash
 
     steps:
-      - name: Throw error if the tag name doesn't equal the release name
+      - name: Throw an error if the tag name doesn't equal the release name
         if: ${{ github.event.release.tag_name != github.event.release.name }}
         run: |
           echo "Tag name (${{ github.event.release.tag_name }}) and release name (${{ github.event.release.name }}) must be the same"
           exit 1
 
-      - name: If release isn't ready for production, skip all following steps
+      - name:
+          If the release isn't ready for production, skip all following steps
         # "isn't ready for production" means the name is semver followed by
         # -alpha or -beta, in the format v1.2.3-alpha or v4.5.6-beta
         id: stage
@@ -37,7 +38,8 @@ jobs:
             echo "stage=production" >> $GITHUB_OUTPUT
           fi
 
-      - name: Throw error if release name isn't semver in the format v1.2.3
+      - name:
+          Throw an error if the release name isn't semver in the format v1.2.3
         if: steps.stage.outputs.stage == 'production'
         run: |
           if [[ ! ${{ github.event.release.name }} =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
@@ -55,7 +57,7 @@ jobs:
           git config user.email "tagmajorversionbot@example.com"
           git config user.name "Tag Major Version Bot"
 
-      - name: Get major version of release
+      - name: Get the major version of the release
         if: steps.stage.outputs.stage == 'production'
         id: version
         # Release name will be something like v1.2.3, and we want to get v1
@@ -65,18 +67,18 @@ jobs:
           MAJOR=$(echo ${{ github.event.release.name }} | cut -f1 -d".")
           echo "major=$MAJOR" >> $GITHUB_OUTPUT
 
-      - name: Delete old tag locally
+      - name: Delete the old tag locally
         if: steps.stage.outputs.stage == 'production'
         # If tag doesn't exist locally, we still want to exit without failing
         run: git tag -d ${{ steps.version.outputs.major }} || true
 
-      - name: Create new tag for major version
+      - name: Create a new tag for the major version
         if: steps.stage.outputs.stage == 'production'
         run:
           git tag -a ${{ steps.version.outputs.major }} -m "Major version ${{
           steps.version.outputs.major }}"
 
-      - name: Delete old tag remotely
+      - name: Delete the old tag remotely
         if: steps.stage.outputs.stage == 'production'
         # https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#delete-a-reference
         # If tag doesn't exist remotely, we still want to exit without failing
@@ -89,6 +91,6 @@ jobs:
           -H "Accept: application/vnd.github+json" \
           repos/${{ github.repository }}/git/refs/tags/${{ steps.version.outputs.major }} || true
 
-      - name: Push new tag remotely
+      - name: Push a new tag remotely
         if: steps.stage.outputs.stage == 'production'
         run: git push -u origin ${{ steps.version.outputs.major }}
