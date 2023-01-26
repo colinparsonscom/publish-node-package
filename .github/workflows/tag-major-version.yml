@@ -9,6 +9,9 @@ jobs:
   tag:
     runs-on: ubuntu-22.04
 
+    permissions:
+      contents: write
+
     defaults:
       run:
         shell: bash
