@@ -1,5 +1,6 @@
 name: Tag major version
 # After creating a release with a semantic version, update the major version tag
+# Only do so if it's not a prerelease, though
 
 on:
   release:
