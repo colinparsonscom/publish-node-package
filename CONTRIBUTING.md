@@ -1,4 +1,4 @@
-# Contributing to universal-timeout-cli
+# Contributing to publish-node-package
 
 A big welcome and thank you for considering contributing to
 publish-node-package! It’s people like you that make it a reality for users in
