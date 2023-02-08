@@ -5,7 +5,8 @@ GitHub action to publish a NodeJS package to NPM and GitHub Packages.
 ## Usage
 
 See [action.yml](action.yml). Make sure you've stored a NPM classic token (an
-"Automation" token) as a secret in your repository. You can generate one at
+"Automation" token) as a secret in your repository. You can generate an NPM
+token at
 [https://www.npmjs.com/settings/your-username/tokens](https://www.npmjs.com/settings/your-username/tokens).
 
 ## Example Workflow
